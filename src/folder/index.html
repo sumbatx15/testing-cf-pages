@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Blabby - Speech to text for Windows</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto",
+          "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans",
+          "Helvetica Neue", sans-serif;
+        background-color: #1a1a1a;
+        color: #ffffff;
+        min-height: 100vh;
+        padding: 0;
+      }
+
+      .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 2rem;
+      }
+
+      /* Header */
+      header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 1.5rem 2rem;
+        margin-bottom: 3rem;
+      }
+
+      .logo {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        font-size: 1.5rem;
+        font-weight: 600;
+      }
+
+      .logo-icon {
+        width: 32px;
+        height: 32px;
+        background: #ffffff;
+        border-radius: 8px;
+        position: relative;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .logo-icon::after {
+        content: "⚡";
+        font-size: 20px;
+      }
+
+      nav {
+        display: flex;
+        align-items: center;
+        gap: 2rem;
+      }
+
+      nav a {
+        color: #ffffff;
+        text-decoration: none;
+        font-size: 0.95rem;
+        transition: opacity 0.2s;
+      }
+
+      nav a:hover {
+        opacity: 0.7;
+      }
+
+      .install-btn {
+        background-color: #2a2a2a;
+        color: #ffffff;
+        border: none;
+        border-radius: 8px;
+        padding: 0.6rem 1.2rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        cursor: pointer;
+        font-size: 0.95rem;
+        transition: background-color 0.2s;
+      }
+
+      .install-btn:hover {
+        background-color: #3a3a3a;
+      }
+
+      .install-btn::before {
+        content: "⚙";
+        font-size: 1rem;
+      }
+
+      /* Main Content */
+      main {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 4rem;
+        padding: 2rem 0;
+      }
+
+      /* Application Demo Section */
+      .app-demo {
+        width: 100%;
+        max-width: 600px;
+        background-color: #252525;
+        border-radius: 12px;
+        padding: 2rem;
+        display: flex;
+        flex-direction: column;
+        gap: 1.5rem;
+      }
+
+      .app-demo-title {
+        font-size: 0.9rem;
+        color: rgba(255, 255, 255, 0.7);
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+      }
+
+      .app-info {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+      }
+
+      .outlook-icon {
+        width: 40px;
+        height: 40px;
+        background: linear-gradient(135deg, #0078d4 0%, #005a9e 100%);
+        border-radius: 8px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #ffffff;
+        font-weight: bold;
+        font-size: 1.2rem;
+      }
+
+      .app-name {
+        font-size: 1.1rem;
+        font-weight: 500;
+      }
+
+      .input-field {
+        width: 100%;
+        background-color: #1a1a1a;
+        border: 1px solid #3a3a3a;
+        border-radius: 8px;
+        padding: 1rem;
+        color: #ffffff;
+        font-size: 1rem;
+        min-height: 50px;
+      }
+
+      .voice-indicator {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        margin-top: 0.5rem;
+      }
+
+      .mic-icon {
+        width: 20px;
+        height: 20px;
+        background-color: #3a3a3a;
+        border-radius: 50%;
+        position: relative;
+      }
+
+      .mic-icon::after {
+        content: "🎤";
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        font-size: 12px;
+      }
+
+      .audio-visualizer {
+        display: flex;
+        align-items: center;
+        gap: 3px;
+        height: 20px;
+      }
+
+      .audio-bar {
+        width: 4px;
+        background-color: #4a9eff;
+        border-radius: 2px;
+        animation: pulse 1s ease-in-out infinite;
+      }
+
+      .audio-bar:nth-child(1) {
+        height: 8px;
+        animation-delay: 0s;
+      }
+      .audio-bar:nth-child(2) {
+        height: 12px;
+        animation-delay: 0.1s;
+      }
+      .audio-bar:nth-child(3) {
+        height: 16px;
+        animation-delay: 0.2s;
+      }
+      .audio-bar:nth-child(4) {
+        height: 12px;
+        animation-delay: 0.3s;
+      }
+      .audio-bar:nth-child(5) {
+        height: 8px;
+        animation-delay: 0.4s;
+      }
+
+      @keyframes pulse {
+        0%,
+        100% {
+          transform: scaleY(0.5);
+          opacity: 0.5;
+        }
+        50% {
+          transform: scaleY(1);
+          opacity: 1;
+        }
+      }
+
+      /* Main CTA Section */
+      .hero {
+        text-align: center;
+        max-width: 700px;
+      }
+
+      .hero h1 {
+        font-size: 3.5rem;
+        font-weight: 700;
+        margin-bottom: 1.5rem;
+        line-height: 1.2;
+      }
+
+      .hero p {
+        font-size: 1.2rem;
+        color: rgba(255, 255, 255, 0.8);
+        margin-bottom: 2.5rem;
+        line-height: 1.6;
+      }
+
+      .download-btn {
+        background: linear-gradient(135deg, #1e3a5f 0%, #2a4a7f 100%);
+        border: 2px solid #4a9eff;
+        border-radius: 50px;
+        padding: 1rem 2rem;
+        color: #ffffff;
+        font-size: 1.1rem;
+        font-weight: 600;
+        cursor: pointer;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.75rem;
+        transition: all 0.3s;
+        box-shadow: 0 0 20px rgba(74, 158, 255, 0.3);
+      }
+
+      .download-btn:hover {
+        box-shadow: 0 0 30px rgba(74, 158, 255, 0.5);
+        transform: translateY(-2px);
+      }
+
+      .download-btn::before {
+        content: "⊞";
+        font-size: 1.3rem;
+        font-weight: normal;
+      }
+
+      .compatibility {
+        margin-top: 1.5rem;
+        font-size: 0.95rem;
+        color: rgba(255, 255, 255, 0.6);
+      }
+
+      .beta-info {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.75rem;
+        margin-top: 1rem;
+      }
+
+      .beta-tag {
+        background-color: #2d5a2d;
+        color: #ffffff;
+        padding: 0.3rem 0.8rem;
+        border-radius: 6px;
+        font-size: 0.85rem;
+        font-weight: 600;
+      }
+
+      .free-text {
+        font-size: 0.95rem;
+        color: rgba(255, 255, 255, 0.7);
+      }
+
+      @media (max-width: 768px) {
+        header {
+          flex-direction: column;
+          gap: 1.5rem;
+          align-items: flex-start;
+        }
+
+        nav {
+          width: 100%;
+          flex-wrap: wrap;
+        }
+
+        .hero h1 {
+          font-size: 2.5rem;
+        }
+
+        .hero p {
+          font-size: 1rem;
+        }
+
+        .app-demo {
+          padding: 1.5rem;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+
+      <main>
+        <!-- Application Demo Section -->
+        <div class="audio-visualizer">
+          <div class="audio-bar"></div>
+          <div class="audio-bar"></div>
+          <div class="audio-bar"></div>
+          <div class="audio-bar"></div>
+          <div class="audio-bar"></div>
+          <div class="audio-bar"></div>
+        </div>
+
+        <!-- Hero Section -->
+        <section class="hero">
+          <h1>Speech to text for Windows.</h1>
+          <p>
+            Type faster than ever before. Use your voice to write documents,
+            emails, and messages in any Windows app.
+          </p>
+          <button class="download-btn">Download Windows App</button>
+          <div class="compatibility">Works on Windows 10 and Windows 11.</div>
+          <div class="beta-info">
+            <span class="beta-tag">BETA</span>
+            <span class="free-text">Free to download</span>
+          </div>
+        </section>
+      </main>
+    </div>
+  </body>
+</html>
